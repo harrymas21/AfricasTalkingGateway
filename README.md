@@ -26,8 +26,15 @@
 	//put from if you using custom alpahnumeric id
 	string from = "Your custom sender id";
 	AfricasTalkingGateway gateway = new AfricasTalkingGateway(username, apiKey);
-	//You can put a try-catch block here for code below
-	dynamic results = gateway.sendMessage(recipients, message);
+	try
+		{
+			dynamic results = gateway.sendMessage(recipients, message);
+			//dynamic results = gateway.sendMessage(recipients, message) if you have sender-id
+			}
+	catch (AfricasTalkingGatewayException ex)
+		{
+			Console.WriteLine("Encountered an error: " + ex.Message);
+			}
 ```
 
 ## 2017
