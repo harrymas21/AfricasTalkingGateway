@@ -84,16 +84,24 @@ using Newtonsoft.Json.Linq;
             string response = sendPostRequest(data, SMS_URLString);
         if (responseCode == (int)HttpStatusCode.Created)
         {
-            var json = serializer.Deserialize<object>(response);
-            var rec = JObject.Parse((string)json);
-            var recipients = rec["SMSMessageData"]["Recipients"];
-            if (recipients.ToString().Length > 0)
+            try
             {
-                return recipients;
+                var json = serializer.Deserialize<object>(response);
+                var rec = JObject.Parse((string)json);
+                var recipients = rec["SMSMessageData"]["Recipients"];
+                if (recipients.ToString().Length > 0)
+                {
+                    return recipients;
+                }
+                throw new AfricasTalkingGatewayException(rec["SMSMessageData"]["Message"].ToString());
             }
-            //  throw new AfricasTalkingGatewayException(rec["SMSMessageData"]["Message"]);
+            catch
+            {
+                throw new AfricasTalkingGatewayException(response);
+            }
+
         }
-            throw new AfricasTalkingGatewayException(response);
+        return response;
         }
 
         //SEND POST
@@ -148,7 +156,10 @@ using Newtonsoft.Json.Linq;
 
                     if (DEBUG)
                         Console.WriteLine("Full response: " + response);
-
+                if (ex.Response != null)
+                {
+                    throw ex;
+                }
                     return response;
                 }
             }
@@ -158,7 +169,7 @@ using Newtonsoft.Json.Linq;
                 throw ex;
             }
         }
-        //////////////////////////////////////////////////////////////////////////////
+
         private bool RemoteCertificateValidationCallback(object sender, System.Security.Cryptography.X509Certificates.X509Certificate certificate, System.Security.Cryptography.X509Certificates.X509Chain chain, System.Net.Security.SslPolicyErrors errors)
         {
             return true;
