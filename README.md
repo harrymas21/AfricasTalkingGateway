@@ -23,18 +23,17 @@
 	string apiKey = "Your api key";
 	string recipients = "+254phonenumber,+254....";
 	string message = "Message Here!!";
-	//put from if you using custom alpahnumeric id
+	//put from if you using custom alpahnumeric id otherwise leave blank
 	string from = "Your custom sender id";
-	AfricasTalkingGateway gateway = new AfricasTalkingGateway(username, apiKey);
-	try
-		{
-			dynamic results = gateway.sendMessage(recipients, message);
-			//dynamic results = gateway.sendMessage(recipients, message) if you have sender-id
-			}
-	catch (AfricasTalkingGatewayException ex)
-		{
-			Console.WriteLine("Encountered an error: " + ex.Message);
-			}
+	AfricasTalkingGateway gateway = new AfricasTalkingGateway(username, apikey);
+                try
+                {
+                    object results = gateway.sendMessage(recepients, message, from);
+                }
+                catch (AfricasTalkingGatewayException ex)
+                {
+                    MessageBox.Show(ex.Message, "Encountered an error while sending the message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
 ```
 
 ## 2017
